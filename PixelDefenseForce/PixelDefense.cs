@@ -12,11 +12,11 @@ namespace PixelDefenseForce
 		private readonly Drawer _drawer;
 		private SpriteBatch _spriteBatch;
 		private TileMap _tileMap;
+		private CameraInputMover _cameraMover;
 
 		public PixelDefense()
 		{
 			_graphics = new GraphicsDeviceManager(this);
-
 			_drawer = new Drawer();
 		}
 
@@ -38,10 +38,11 @@ namespace PixelDefenseForce
 			_camera = new Camera
 			{
 				Resolution = new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
-				Position = new Vector2(0, 0),
+				Position = new Vector2(8, 8),
 				Zoom = 2,
 				TileSize = new Point(32, 32)
 			};
+			_cameraMover = new CameraInputMover();
 
 			// Generate a test map for now
 			_tileMap = new TileMap {Tiles = new Tile[16][]};
@@ -68,18 +69,20 @@ namespace PixelDefenseForce
 			Content.Unload();
 		}
 
-		protected override void Update(GameTime gameTime)
+		protected override void Update(GameTime time)
 		{
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
 			    Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			base.Update(gameTime);
+			_cameraMover.Update(time, _camera);
+
+			base.Update(time);
 		}
 
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.Clear(Color.Black);
 
 			_spriteBatch.Begin(
 				SpriteSortMode.Deferred, BlendState.AlphaBlend,
