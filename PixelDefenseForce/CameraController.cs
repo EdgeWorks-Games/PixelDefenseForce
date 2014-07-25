@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PixelDefenseForce
 {
-	internal class CameraInputMover
+	internal class CameraController : GameComponent
 	{
 		// TODO: Replace this entire class with a rebindable key system
 
@@ -12,17 +12,22 @@ namespace PixelDefenseForce
 		private const float ZoomScrollIncrement = 120;
 		private int _previousScrollPosition;
 
-		public CameraInputMover()
+		public CameraController(Game game, Camera camera)
+			: base(game)
 		{
+			TargetCamera = camera;
+
 			_previousScrollPosition = Mouse.GetState().ScrollWheelValue;
 		}
 
-		public void Update(GameTime time, Camera camera)
+		public Camera TargetCamera { get; set; }
+
+		public override void Update(GameTime gameTime)
 		{
-			var scrollPosition = (int)(Mouse.GetState().ScrollWheelValue / ZoomScrollIncrement);
+			var scrollPosition = (int) (Mouse.GetState().ScrollWheelValue/ZoomScrollIncrement);
 			if (scrollPosition != _previousScrollPosition)
 			{
-				var zoom = camera.Zoom;
+				var zoom = TargetCamera.Zoom;
 				var scrollDifference = scrollPosition - _previousScrollPosition;
 
 				// Move zoom to next power of 2
@@ -35,13 +40,13 @@ namespace PixelDefenseForce
 				zoom = Math.Min(zoom, 4);
 				zoom = Math.Max(zoom, 1);
 
-				camera.Zoom = zoom;
+				TargetCamera.Zoom = zoom;
 				_previousScrollPosition = scrollPosition;
 			}
 
-			var camPos = camera.Position;
+			var camPos = TargetCamera.Position;
 
-			var changeValue = (float)((Speed/camera.Zoom) * time.ElapsedGameTime.TotalSeconds);
+			var changeValue = (float) ((Speed/TargetCamera.Zoom)*gameTime.ElapsedGameTime.TotalSeconds);
 			if (Keyboard.GetState().IsKeyDown(Keys.D))
 				camPos.X += changeValue;
 			if (Keyboard.GetState().IsKeyDown(Keys.A))
@@ -51,7 +56,7 @@ namespace PixelDefenseForce
 			if (Keyboard.GetState().IsKeyDown(Keys.W))
 				camPos.Y -= changeValue;
 
-			camera.Position = camPos;
+			TargetCamera.Position = camPos;
 		}
 	}
 }

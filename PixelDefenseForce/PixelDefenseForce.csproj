@@ -48,13 +48,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildDrawer.cs" />
     <Compile Include="Camera.cs" />
-    <Compile Include="CameraInputMover.cs" />
+    <Compile Include="CameraController.cs" />
     <Compile Include="Content\TileMap.cs" />
     <Compile Include="Content\TileType.cs" />
-    <Compile Include="Drawer.cs" />
+    <Compile Include="GameDrawer.cs" />
+    <Compile Include="IDrawer.cs" />
+    <Compile Include="MonoGameExtensions.cs" />
     <Compile Include="PixelDefense.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectionController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

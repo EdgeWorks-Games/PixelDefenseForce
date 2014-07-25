@@ -7,17 +7,17 @@ namespace PixelDefenseForce
 {
 	public sealed class PixelDefense : Game
 	{
+		private readonly IDrawer _drawer;
 		private readonly GraphicsDeviceManager _graphics;
 		private Camera _camera;
-		private readonly Drawer _drawer;
+		private SelectionController _selectionController;
 		private SpriteBatch _spriteBatch;
 		private TileMap _tileMap;
-		private CameraInputMover _cameraMover;
 
 		public PixelDefense()
 		{
 			_graphics = new GraphicsDeviceManager(this);
-			_drawer = new Drawer();
+			_drawer = new GameDrawer();
 		}
 
 		protected override void Initialize()
@@ -29,6 +29,7 @@ namespace PixelDefenseForce
 
 			// Perhaps retrieve/create a settings file here?
 
+			// Set graphics settings
 			_graphics.PreferMultiSampling = false;
 			_graphics.PreferredBackBufferWidth = 1280;
 			_graphics.PreferredBackBufferHeight = 720;
@@ -42,7 +43,11 @@ namespace PixelDefenseForce
 				Zoom = 2,
 				TileSize = new Point(32, 32)
 			};
-			_cameraMover = new CameraInputMover();
+			Components.Add(new CameraController(this, _camera));
+
+			// Add a selection box
+			_selectionController = new SelectionController(this, _camera);
+			Components.Add(_selectionController);
 
 			// Generate a test map for now
 			_tileMap = new TileMap {Tiles = new Tile[16][]};
@@ -59,6 +64,7 @@ namespace PixelDefenseForce
 
 			var tileset = Content.Load<Texture2D>("Graphics/Tiles");
 			_tileMap.Tileset = tileset;
+			_selectionController.Model.Tileset = tileset;
 		}
 
 		protected override void UnloadContent()
@@ -75,8 +81,6 @@ namespace PixelDefenseForce
 			    Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			_cameraMover.Update(time, _camera);
-
 			base.Update(time);
 		}
 
@@ -90,6 +94,7 @@ namespace PixelDefenseForce
 				RasterizerState.CullCounterClockwise);
 
 			_drawer.Draw(_spriteBatch, _camera, _tileMap);
+			_drawer.Draw(_spriteBatch, _camera, _selectionController.Model);
 
 			_spriteBatch.End();
 

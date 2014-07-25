@@ -4,7 +4,7 @@ using PixelDefenseForce.Content;
 
 namespace PixelDefenseForce
 {
-	internal sealed class Drawer
+	internal sealed class GameDrawer : IDrawer
 	{
 		public void Draw(SpriteBatch spriteBatch, Camera camera, TileMap tileMap)
 		{
@@ -16,15 +16,30 @@ namespace PixelDefenseForce
 
 					spriteBatch.Draw(
 						tileMap.Tileset,
-						camera.ToAbsolute(new Vector2(x, y)),
+						camera.ToWindow(new Rectangle(x, y, 1, 1)),
 						new Rectangle(
 							32, 0, //tile.TileType.TextureLocation.X, tile.TileType.TextureLocation.Y,
 							32, 32),
 						Color.White,
-						0f, Vector2.Zero, camera.Zoom,
+						0f, Vector2.Zero,
 						SpriteEffects.None, 0f);
 				}
 			}
+		}
+
+		public void Draw(SpriteBatch spriteBatch, Camera camera, SelectionModel model)
+		{
+			spriteBatch.Draw(
+				model.Tileset,
+				camera.ToWindow(new Rectangle(
+					(int)model.MouseHoverTile.X, (int)model.MouseHoverTile.Y,
+					1, 1)),
+				new Rectangle(
+					0, 32,
+					32, 32),
+				Color.White,
+				0f, Vector2.Zero,
+				SpriteEffects.None, 0f);
 		}
 	}
 }
