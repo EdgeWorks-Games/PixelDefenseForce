@@ -10,6 +10,14 @@ namespace PixelDefenseForce
 		}
 	}
 
+	internal static class MathExt
+	{
+		public static int IntRound(float value)
+		{
+			return (int)(value + 0.5f);
+		}
+	}
+
 	internal struct WorldPosition
 	{
 		public Vector2 Vector;

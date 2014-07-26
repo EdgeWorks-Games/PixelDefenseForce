@@ -29,14 +29,17 @@ namespace PixelDefenseForce
 
 		public void Draw(SpriteBatch spriteBatch, Camera camera, SelectionModel model)
 		{
+			var tileLocation =
+				model.SelectedTile == null
+					? model.HoveredTile
+					: model.SelectedTile.Value;
+
 			spriteBatch.Draw(
 				model.Tileset,
 				camera.ToWindow(new Rectangle(
-					(int)model.MouseHoverTile.X, (int)model.MouseHoverTile.Y,
+					(int) tileLocation.X, (int) tileLocation.Y,
 					1, 1)),
-				new Rectangle(
-					0, 32,
-					32, 32),
+				new Rectangle(0, 32, 32, 32),
 				Color.White,
 				0f, Vector2.Zero,
 				SpriteEffects.None, 0f);

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace PixelDefenseForce
 {
@@ -40,8 +39,8 @@ namespace PixelDefenseForce
 		public WindowPosition ToWindow(WorldPosition position)
 		{
 			return new WindowPosition(
-				(int) Math.Round((position.X - Position.X)*_zoomedTileSize.X + _halfResolution.X),
-				(int) Math.Round((position.Y - Position.Y)*_zoomedTileSize.Y + _halfResolution.Y));
+				MathExt.IntRound((position.X - Position.X) * _zoomedTileSize.X + _halfResolution.X),
+				MathExt.IntRound((position.Y - Position.Y) * _zoomedTileSize.Y + _halfResolution.Y));
 		}
 
 		public Rectangle ToWindow(Rectangle rectangle)
