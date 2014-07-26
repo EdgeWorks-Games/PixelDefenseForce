@@ -16,11 +16,13 @@ namespace PixelDefenseForce.Content
 	{
 		public readonly TileType TileType;
 		public readonly Paths Paths;
+		public readonly bool IsDisabled;
 
-		public Tile(TileType tileType, Paths paths)
+		public Tile(TileType tileType, Paths paths, bool isDisabled)
 		{
 			TileType = tileType;
 			Paths = paths;
+			IsDisabled = isDisabled;
 		}
 	}
 

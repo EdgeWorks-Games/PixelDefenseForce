@@ -14,15 +14,18 @@ namespace PixelDefenseForce
 				{
 					var tile = tileMap.Tiles[x][y];
 
-					spriteBatch.Draw(
-						tileMap.Tileset,
+					DrawTile(
+						spriteBatch, tileMap.Tileset,
 						camera.ToWindow(new Rectangle(x, y, 1, 1)),
-						new Rectangle(
-							32, 0, //tile.TileType.TextureLocation.X, tile.TileType.TextureLocation.Y,
-							32, 32),
-						Color.White,
-						0f, Vector2.Zero,
-						SpriteEffects.None, 0f);
+						new Point(1, 0));
+
+					if (tile.IsDisabled)
+					{
+						DrawTile(
+							spriteBatch, tileMap.Tileset,
+							camera.ToWindow(new Rectangle(x, y, 1, 1)),
+							new Point(2, 1));
+					}
 				}
 			}
 		}
@@ -34,12 +37,24 @@ namespace PixelDefenseForce
 					? model.HoveredTile
 					: model.SelectedTile.Value;
 
+			DrawTile(
+				spriteBatch, model.Tileset,
+				camera.ToWindow(new Rectangle((int) tileLocation.X, (int) tileLocation.Y, 1, 1)),
+				new Point(0, 1));
+		}
+
+		private static void DrawTile(
+			SpriteBatch spriteBatch, Texture2D tileset,
+			Rectangle targetPosition, Point sourcePosition)
+		{
+			// TODO: Perhaps replace this with a better SpriteBatch extension method specifically for tiles.
+
 			spriteBatch.Draw(
-				model.Tileset,
-				camera.ToWindow(new Rectangle(
-					(int) tileLocation.X, (int) tileLocation.Y,
-					1, 1)),
-				new Rectangle(0, 32, 32, 32),
+				tileset,
+				targetPosition,
+				new Rectangle(
+					sourcePosition.X*32, sourcePosition.Y*32,
+					32, 32),
 				Color.White,
 				0f, Vector2.Zero,
 				SpriteEffects.None, 0f);

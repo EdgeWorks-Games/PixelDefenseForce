@@ -45,14 +45,21 @@ namespace PixelDefenseForce
 			};
 			Components.Add(new CameraController(this, _camera));
 
-			// Add a selection box
-			_selectionController = new SelectionController(this, _camera);
-			Components.Add(_selectionController);
-
 			// Generate a test map for now
 			_tileMap = new TileMap {Tiles = new Tile[16][]};
 			for (var x = 0; x < _tileMap.Tiles.Length; x++)
 				_tileMap.Tiles[x] = new Tile[16];
+
+			// Add a row of blocked tiles to test
+			for (var y = 0; y < _tileMap.Tiles[0].Length; y++)
+			{
+				var oldTile = _tileMap.Tiles[0][y];
+				_tileMap.Tiles[0][y] = new Tile(oldTile.TileType, oldTile.Paths, true);
+			}
+
+			// Allow the player to select stuff
+			_selectionController = new SelectionController(this, _camera);
+			Components.Add(_selectionController);
 
 			base.Initialize();
 		}
